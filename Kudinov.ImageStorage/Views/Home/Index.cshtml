@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<input type="button" id="upload-file" value="Upload" />
+
+<div id="result">
+
+</div>
+
+<script>
+    var uploader = new plupload.Uploader({
+        browse_button: 'upload-file', // this can be an id of a DOM element or the DOM element itself
+        url: '/Home/Index',
+        unique_names: true,
+        runtimes: "html5"
+    });
+
+    uploader.init();
+
+    uploader.bind('FilesAdded', function (up, files) {
+        up.start();
+        $("#result").html("Loading...");
+    });
+
+    uploader.bind('UploadProgress', function (up, file) {
+        //document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+    });
+
+    uploader.bind("FileUploaded", function (up, file, resp) {
+        var parsedResp = JSON.parse(resp.response);
+
+        $("#result").html("Success: " + parsedResp.Filename);
+
+        console.log("File uploaded: " + parsedResp.Filename);
+    })
+
+</script>
